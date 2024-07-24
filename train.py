@@ -153,7 +153,6 @@ def accuracy(model, loss_function, image, label):
     is_correct = argmaxes == label.long().squeeze().to(device)
     return is_correct.cpu().numpy().tolist(), argmaxes
 
-#  
 @torch.no_grad()
 def validation_loss(model, loss_function, image, label):
     model.eval()
@@ -178,8 +177,8 @@ for epoch in range(NUM_EPOCHS):
     test_epoch_accuracies = []
     for image, label in tqdm(iter(test_dataset_loader)):
         loss = validation_loss(model, loss_function, image, label)
+        is_correct, predicted_classes = accuracy(model, loss_function, image, label)
         test_epoch_losses.append(loss)
-        is_correct = accuracy(model, loss_function, image, label)
         test_epoch_accuracies.extend(is_correct)
     test_epoch_loss = np.mean(test_epoch_losses)
     print(f"Test Loss: {test_epoch_loss:.4f}")
